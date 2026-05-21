@@ -49,12 +49,12 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Download HTML artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: output-html
-          path: created_htmls
 
+      - name: List downloaded stuff
         run: ls -al created_htmls
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: created_htmls
 
@@ -78,11 +78,9 @@ jobs:
 
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/si-2026-lab3:${BRANCH_NAME}-latest
-
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-
       - name: Setup Pages
         uses: actions/configure-pages@v4
+        uses: actions/download-artifact@v4
+        with:
+          name: output-html
 
